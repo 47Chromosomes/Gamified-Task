@@ -44,17 +44,17 @@ while True:
                 clear_lines(5)
                 quest.view_quests()
                 time.sleep(2)
-                clear_lines(len(quest.container) + 1)
+                clear_lines(len(quest.container))
             elif ch2 == '2':
                 clear_lines(5)
                 quest.sorting_deadline()
                 time.sleep(2)
-                clear_lines(len(quest.container) + 1)
+                clear_lines(len(quest.container))
             elif ch2 == '3':
                 clear_lines(5)
                 quest.sorting_difficulty()
                 time.sleep(2)
-                clear_lines(len(quest.container) + 1)
+                clear_lines(len(quest.container))
             elif ch2 == '4':
                 clear_lines(5)
                 time.sleep(2)
@@ -69,7 +69,7 @@ while True:
         deadline = input("Enter Deadline (YYYY-MM-DD): ")
         difficulty = int(input("Enter Difficulty (1-10): "))
         quest.add_task(name, deadline, difficulty)
-
+        
         time.sleep(3)
         clear_lines(4)
     elif ch == '3':

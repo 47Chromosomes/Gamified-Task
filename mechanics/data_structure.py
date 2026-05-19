@@ -17,6 +17,7 @@ class Quests:
             for name, details in self.container.items():
                 print(f"Quest: {name}, Deadline: {details['Deadline']}, Difficulty: {details['Difficulty']}")
 
+
     def sorting_deadline(self):
         if not self.container:
             print("No quests in the log.")
