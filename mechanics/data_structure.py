@@ -20,18 +20,39 @@ class Quests:
     def sorting_deadline(self):
         if not self.container:
             print("No quests in the log.")
-        else:
-            sorted_quests = sorted(self.container.items(), key=lambda x: datetime.strptime(x[1]['Deadline'], "%Y-%m-%d"))
+            return
+
+        def parse_date(date_str):
+            # Replaces spaces or slashes with dashes automatically
+            clean_date = date_str.replace(" ", "-").replace("/", "-")
+            return datetime.strptime(clean_date, "%Y-%m-%d")
+
+        try:
+            # Lambda fixed to correctly look inside the tuple details x[1]
+            sorted_quests = sorted(self.container.items(), key=lambda x: parse_date(x[1]['Deadline']))
             for name, details in sorted_quests:
                 print(f"Quest: {name}, Deadline: {details['Deadline']}, Difficulty: {details['Difficulty']}")
+        except ValueError:
+            print("Error: Could not read date format. Please use YYYY-MM-DD.")
+
 
     def sorting_difficulty(self):
         if not self.container:
             print("No quests in the log.")
-        else:
-            sorted_quests = sorted(self.container.items(), key=lambda x: x[1]['Difficulty'], reverse=True)
+            return # Stops execution so it doesn't crash below
+            
+        def parse_date(date_str):
+            # Replaces spaces or slashes with dashes automatically
+            clean_date = date_str.replace(" ", "-").replace("/", "-")
+            return datetime.strptime(clean_date, "%Y-%m-%d")
+        
+        try:
+            sorted_quests = sorted(self.container.items(), key=lambda x: parse_date(x[1]['Deadline']))
             for name, details in sorted_quests:
                 print(f"Quest: {name}, Deadline: {details['Deadline']}, Difficulty: {details['Difficulty']}")
+        except ValueError:
+            print("Error: Difficulty must be an integer between 1 and 10.")
+
 
 
 
