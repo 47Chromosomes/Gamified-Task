@@ -13,6 +13,7 @@ class Quests:
         self.status = "unfinished"
         self.container = {}
 
+
     def add_tast(self, name, deadline, difficulty):
         if name not in self.container:
             self.container[name] = {"Deadline : ": deadline, "Difficulty": difficulty}
@@ -20,6 +21,7 @@ class Quests:
             print(f"{name} added to Quest Log!")
         else:
             return f"{name} already in Quest Log!"
+
 
     def remove(self, name):
         if name in self.container:
