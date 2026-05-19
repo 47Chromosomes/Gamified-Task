@@ -17,11 +17,15 @@ class Quests:
         if name not in self.container:
             self.container[name] = {"Deadline : ": deadline, "Difficulty": difficulty}
 
+            print(f"{name} added to Quest Log!")
+        else:
+            return f"{name} already in Quest Log!"
+
     def remove(self, name):
         if name in self.container:
-            self.container.remove(name)
+            del self.container[name]
         else:
-            return f"{name} not in {self.container}"
+            return f"{name} not in Quest Log!"
         
     
 
