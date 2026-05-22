@@ -4,7 +4,8 @@ This file contains all the operations to run the game.
 import os
 import sys
 import time
-from mechanics import *
+from mechanics.data_structure import Quests
+
 quest = Quests()
 
 def clear_screen():
@@ -12,81 +13,91 @@ def clear_screen():
 
 def clear_lines(n):
     for _ in range(n):
-        sys.stdout.write("\033[F") # Move cursor up
-        sys.stdout.write("\033[K") # Clear line content
+        sys.stdout.write("\033[F")
+        sys.stdout.write("\033[K")
     sys.stdout.flush()
 
+def pause():
+    input("\nPress [Enter] To Continue...")
+
+clear_screen()
 print('STUDYQUEST INITIALIZING…')
 print("A Gamified Task Prioritizer")
-print(
-		"1. Quest Log\n"
-		"2. Add Quest\n"
-		"3. Complete Quest\n"
-		"4. Edit/Delete Quest\n"
-		"5. View Stats\n"
-		"6. Save & Exit\n"
-)
 
 while True:
+    print(
+        "\n1. Quest Log"
+        "\n2. Add Quest"
+        "\n3. Complete Quest"
+        "\n4. Edit/Delete Quest"
+        "\n5. View Stats"
+        "\n6. Save & Exit\n"
+    )
+
     ch = input("Enter Command: ")
 
     if ch == '1':
         while True:
             ch2 = input(
-                "[1] View Quests\n"
-                "[2] View Sorted Quests by Deadline\n"
-                "[3] View Sorted Quests by Difficulty\n"
-                "[4] Back to Main Menu\n"
+                "\n[1] View Quests"
+                "\n[2] View Sorted by Deadline"
+                "\n[3] View Sorted by Difficulty"
+                "\n[4] Back\n"
                 "Enter Command: "
             )
 
             if ch2 == '1':
-                clear_lines(5)
+                clear_screen()
                 quest.view_quests()
-                time.sleep(2)
-                clear_lines(len(quest.container))
+                pause()
+
             elif ch2 == '2':
-                clear_lines(5)
+                clear_screen()
                 quest.sorting_deadline()
-                time.sleep(2)
-                clear_lines(len(quest.container))
+                pause()
+
             elif ch2 == '3':
-                clear_lines(5)
+                clear_screen()
                 quest.sorting_difficulty()
-                time.sleep(2)
-                clear_lines(len(quest.container))
+                pause()
+
             elif ch2 == '4':
-                clear_lines(5)
-                time.sleep(2)
+                clear_screen()
                 break
+
             else:
-                clear_lines(5)
-                print("Invalid Choice... Try Again")
-                time.sleep(2)
-                clear_lines(1)
+                print("Invalid choice.")
+                pause()
+
     elif ch == '2':
+        clear_screen()
+
         name = input("Enter Quest Name: ")
         deadline = input("Enter Deadline (YYYY-MM-DD): ")
-        difficulty = int(input("Enter Difficulty (1-10): "))
+
+        difficulty = input("Enter Difficulty (1-10): ")
+
         quest.add_task(name, deadline, difficulty)
-        
-        time.sleep(3)
-        clear_lines(4)
+
+        pause()
+        clear_screen()
+
     elif ch == '3':
-        pass
+        print("Complete Quest feature coming soon.")
+        pause()
 
     elif ch == '4':
-        pass
+        print("Edit/Delete feature coming soon.")
+        pause()
 
     elif ch == '5':
-        pass
-    
+        print("Stats feature coming soon.")
+        pause()
+
     elif ch == '6':
-        print("Thank you for playing")
+        print("Thank you for playing StudyQuest!")
         break
 
     else:
-        print("Invalid Option!... try again")
-
-    input("Press [Enter] To Continue...")
-    clear_lines(2)
+        print("Invalid Option!")
+        pause()
