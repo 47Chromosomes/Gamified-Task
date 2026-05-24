@@ -1,11 +1,12 @@
 """
-This FIle contains all menu options of the system
+Add a Description here
 """
 
 import json
 from .data_structure import Task_HashTable, stack, queue
 from .utils import clear_lines, clear_screen, pause, box, line
 from .system import Tasks_System
+from datetime import datetime
 
 
 class Main_Menu:
@@ -120,6 +121,10 @@ class Main_Menu:
             with open(player_file, "w") as f:
                 json.dump(data, f, indent=4)
             print("All completed quests have been Emptied.")
+        else:
+            return
+
+
     #===========================
     #Adding a Task
     #===========================
@@ -157,21 +162,75 @@ class Main_Menu:
         clear_screen()
         box("Completing Task")
         print(
-            "Difficulty Dominance (displays the hardest task to accomplish)\n"
-            "Deadline Defense (shows the first most needed to accomplish)\n"
+            "Normal Mode → choose a task by name\n"
+            "Difficulty Dominance → hardest task first (Stack)\n"
+            "Deadline Defense → earliest deadline first (Queue)\n"
         )
         ch = input("What type of Mode would you like to do?: ")
-        if ch.lower() in ["deadline", "deadline defense"]:
-            tasks.sort_tasks("deadline")
-            name = input("What task would you like to do?: ")
-            if name in tasks:
-                self.system.complete_task(name = name, mode = ch)
+
+        tasks_dict = tasks.to_dict()
+
+        if not tasks_dict:
+            print("No tasks available.")
+            return
+
+        # Difficulty Dominance (Stack)
+        if ch.lower() in ["difficulty", "difficulty dominance"]:
+            s = stack()
+            for t in sorted(tasks_dict.values(), key=lambda t: int(t["Difficulty"])):
+                s.push(t)
+            task = s.pop()
+            print(f"\nNext hardest task: {task['Name']} (Difficulty: {task['Difficulty']}, Deadline: {task['Deadline']})")
+            confirm = input(f"Do you want to complete '{task['Name']}'? (y/n): ")
+            if confirm.lower() == "y":
+                self.system.complete_task(name=task["Name"], mode="difficulty")
             else:
-                return f"No {name} exists on the list"
-        elif ch.lower() in ["difficulty", "difficulty dominance"]:
-            tasks.sort_tasks("difficulty")
-            name = input("What task would you like to do?: ")
-            if name in tasks:
-                self.system.complete_task(name = name, mode = ch)
+                print("Returning to main menu...")
+
+        # Deadline Defense (Queue)
+        elif ch.lower() in ["deadline", "deadline defense"]:
+            q = queue()
+            for t in sorted(
+                tasks_dict.values(),
+                key=lambda t: (
+                    t["Deadline"] if isinstance(t["Deadline"], datetime)
+                    else datetime.strptime(t["Deadline"], "%Y-%m-%d")
+                )
+            ):
+                q.enqueue(t)
+            task = q.dequeue()
+            print(f"\nNext earliest deadline task: {task['Name']} (Difficulty: {task['Difficulty']}, Deadline: {task['Deadline']})")
+            confirm = input(f"Do you want to complete '{task['Name']}'? (y/n): ")
+            if confirm.lower() == "y":
+                self.system.complete_task(name=task["Name"], mode="deadline")
             else:
-                return f"No {name} exists on the list"
+                print("Returning to main menu...")
+
+        # Normal Mode
+        elif ch.lower() in ["normal", "normal mode"]:
+            print("\nAvailable Tasks:")
+            for t in tasks_dict.values():
+                deadline = (
+                    t["Deadline"].strftime("%Y-%m-%d")
+                    if isinstance(t["Deadline"], datetime)
+                    else str(t["Deadline"])
+                )
+                print(f"- {t['Name']} (Difficulty: {t['Difficulty']}, Deadline: {deadline})")
+
+            name = input("\nEnter the name of the task you want to complete: ")
+            task = tasks_dict.get(name)
+
+            if not task:
+                print(f"No task named {name} found.")
+                return
+
+            confirm = input(f"Are you sure you want to complete '{name}'? (y/n): ")
+            if confirm.lower() == "y":
+                self.system.complete_task(name=name, mode="normal")
+            else:
+                print("Returning to main menu...")
+
+        else:
+            print(f"Invalid mode: {ch}")
+
+
