@@ -36,7 +36,7 @@ def Start_Game():
             print("Task Saved Succesfully!")
 
         elif choice == "7":
-            print("Thank you for Study Quest!")
+            print("Thank you for playing Study Quest!")
             print("See you Soon! 👋")
             pause()
             break
@@ -52,4 +52,3 @@ def Start_Game():
 
 if __name__ == "__main__":
     game = Start_Game()
-    
